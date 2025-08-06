@@ -40,7 +40,7 @@
             font-size: 14px;
         }
         .btn {
-            background-color: #007bff;
+            background-color:rgb(81, 162, 248);
             color: white;
             padding: 12px 20px;
             border: none;
