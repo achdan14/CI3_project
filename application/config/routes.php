@@ -49,6 +49,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'login';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+// Custom routes untuk sistem login dan registrasi
+$route['login'] = 'login/index';
+$route['login/authenticate'] = 'login/authenticate';
+$route['logout'] = 'login/logout';
+$route['register'] = 'register/index';
+$route['register/submit'] = 'register/submit';
+$route['dashboard'] = 'dashboard/index';
+$route['dashboard/profile'] = 'dashboard/profile';
+$route['dashboard/users'] = 'dashboard/users';
+
+// Admin routes
+$route['admin'] = 'admin/index';
+$route['admin/dashboard'] = 'admin/index';
+$route['admin/products'] = 'admin/products';
+$route['admin/add-product'] = 'admin/add_product';
+$route['admin/edit-product/(:num)'] = 'admin/edit_product/$1';
+$route['admin/delete-product/(:num)'] = 'admin/delete_product/$1';
+$route['admin/categories'] = 'admin/categories';
+$route['admin/add-category'] = 'admin/add_category';
+$route['admin/transactions'] = 'admin/transactions';
+$route['admin/add-transaction'] = 'admin/add_transaction';
+$route['admin/view-transaction/(:num)'] = 'admin/view_transaction/$1';
+$route['admin/reports'] = 'admin/reports';
+$route['admin/export-report'] = 'admin/export_report';
