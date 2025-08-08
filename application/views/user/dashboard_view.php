@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?php echo $page_title; ?> - Admin Panel</title>
+    <title><?php echo $page_title; ?> - User Dashboard</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -14,103 +14,75 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
+            background-color: #f8f9fa;
             color: #333;
         }
         
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 280px;
-            height: 100vh;
+        .navbar {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px 0;
-            z-index: 1000;
-            overflow-y: auto;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
-        .sidebar-header {
-            text-align: center;
-            padding: 0 20px 30px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-        }
-        
-        .sidebar-header h2 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-header p {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        
-        .sidebar ul {
-            list-style: none;
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 0 20px;
-        }
-        
-        .sidebar ul li {
-            margin: 5px 0;
-        }
-        
-        .sidebar ul li a {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        
-        .sidebar ul li a i {
-            margin-right: 12px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .sidebar ul li a:hover,
-        .sidebar ul li a.active {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateX(5px);
-        }
-        
-        .main-content {
-            margin-left: 280px;
-            padding: 20px;
-        }
-        
-        .header {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        .header h1 {
-            color: #333;
-            font-size: 28px;
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .navbar-nav {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            list-style: none;
+            gap: 20px;
         }
         
-        .header-info {
-            text-align: right;
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
         
-        .header-info p {
+        .navbar-nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .welcome-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .welcome-section h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .welcome-section p {
             color: #666;
-            margin-bottom: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
         }
         
         .stats-grid {
@@ -141,7 +113,6 @@
         .stat-card.primary i { color: #007bff; }
         .stat-card.success i { color: #28a745; }
         .stat-card.warning i { color: #ffc107; }
-        .stat-card.danger i { color: #dc3545; }
         .stat-card.info i { color: #17a2b8; }
         
         .stat-card h3 {
@@ -161,14 +132,14 @@
             gap: 30px;
         }
         
-        .main-panel {
+        .main-content {
             background: white;
             border-radius: 15px;
             padding: 25px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        .sidebar-panel {
+        .sidebar-content {
             background: white;
             border-radius: 15px;
             padding: 25px;
@@ -212,38 +183,33 @@
             color: #28a745;
         }
         
-        .product-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
         }
         
-        .product-item:last-child {
-            border-bottom: none;
+        .product-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
         }
         
-        .product-info h4 {
-            font-size: 16px;
-            margin-bottom: 5px;
+        .product-card:hover {
+            transform: translateY(-3px);
         }
         
-        .product-info p {
+        .product-card h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .product-card p {
             color: #666;
             font-size: 14px;
         }
-        
-        .stock-badge {
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        
-        .stock-low { background-color: #dc3545; color: white; }
-        .stock-medium { background-color: #ffc107; color: #212529; }
-        .stock-high { background-color: #28a745; color: white; }
         
         .btn {
             display: inline-block;
@@ -276,6 +242,16 @@
             color: white;
         }
         
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+            color: #212529;
+        }
+        
         .alert {
             padding: 15px;
             border-radius: 8px;
@@ -294,90 +270,57 @@
             color: #721c24;
         }
         
-        .monthly-stats {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .badge {
+            padding: 5px 10px;
             border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-        
-        .monthly-stats h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .monthly-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-        
-        .monthly-stat {
-            text-align: center;
-        }
-        
-        .monthly-stat h4 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .monthly-stat p {
             font-size: 12px;
-            opacity: 0.8;
+            font-weight: bold;
+        }
+        
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .badge-danger {
+            background-color: #dc3545;
+            color: white;
         }
         
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s;
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
             .content-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .navbar-nav {
+                flex-direction: column;
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h2><i class="fas fa-crown"></i> Admin Panel</h2>
-            <p>Manajemen Sistem</p>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="<?php echo base_url('dashboard'); ?>" class="navbar-brand">
+                <i class="fas fa-home"></i> User Dashboard
+            </a>
+            <ul class="navbar-nav">
+                <li><a href="<?php echo base_url('dashboard'); ?>"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="<?php echo base_url('dashboard/products'); ?>"><i class="fas fa-box"></i> Produk</a></li>
+                <li><a href="<?php echo base_url('dashboard/my_transactions'); ?>"><i class="fas fa-shopping-cart"></i> Transaksi</a></li>
+                <li><a href="<?php echo base_url('dashboard/profile'); ?>"><i class="fas fa-user"></i> Profil</a></li>
+                <li><a href="<?php echo base_url('login/logout'); ?>"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
         </div>
-        <ul>
-            <li><a href="<?php echo base_url('admin'); ?>" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="<?php echo base_url('admin/users'); ?>"><i class="fas fa-users"></i> Manajemen User</a></li>
-            <li><a href="<?php echo base_url('admin/products'); ?>"><i class="fas fa-box"></i> Manajemen Produk</a></li>
-            <li><a href="<?php echo base_url('admin/categories'); ?>"><i class="fas fa-tags"></i> Manajemen Kategori</a></li>
-            <li><a href="<?php echo base_url('admin/transactions'); ?>"><i class="fas fa-shopping-cart"></i> Riwayat Transaksi</a></li>
-            <li><a href="<?php echo base_url('admin/add-transaction'); ?>"><i class="fas fa-plus-circle"></i> Input Transaksi</a></li>
-            <li><a href="<?php echo base_url('admin/reports'); ?>"><i class="fas fa-chart-bar"></i> Laporan</a></li>
-            <li><a href="<?php echo base_url('dashboard'); ?>"><i class="fas fa-user"></i> User Dashboard</a></li>
-            <li><a href="<?php echo base_url('logout'); ?>"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-        </ul>
-    </div>
+    </nav>
 
-    <div class="main-content">
-        <div class="header">
-            <h1>
-                <i class="fas fa-tachometer-alt"></i>
-                <?php echo $page_title; ?>
-            </h1>
-            <div class="header-info">
-                <p>Selamat datang, Admin!</p>
-                <p><?php echo date('d F Y, H:i'); ?></p>
-            </div>
-        </div>
-
+    <div class="container">
         <?php if($this->session->flashdata('success')): ?>
             <div class="alert alert-success">
                 <i class="fas fa-check-circle"></i> <?php echo $this->session->flashdata('success'); ?>
@@ -390,56 +333,43 @@
             </div>
         <?php endif; ?>
 
-        <div class="stats-grid">
-            <div class="stat-card primary">
-                <i class="fas fa-box"></i>
-                <h3><?php echo $total_products; ?></h3>
-                <p>Total Produk</p>
-            </div>
-            <div class="stat-card success">
-                <i class="fas fa-shopping-cart"></i>
-                <h3><?php echo $total_transactions; ?></h3>
-                <p>Total Transaksi</p>
-            </div>
-            <div class="stat-card warning">
-                <i class="fas fa-calendar-day"></i>
-                <h3><?php echo $today_transactions; ?></h3>
-                <p>Transaksi Hari Ini</p>
-            </div>
-            <div class="stat-card danger">
-                <i class="fas fa-users"></i>
-                <h3><?php echo $total_users; ?></h3>
-                <p>Total User</p>
-            </div>
+        <div class="welcome-section">
+            <h1>Selamat Datang, <?php echo htmlspecialchars($user['username']); ?>! 👋</h1>
+            <p>Berikut adalah ringkasan aktivitas dan informasi terbaru untuk akun Anda.</p>
         </div>
 
-        <div class="monthly-stats">
-            <h3><i class="fas fa-chart-line"></i> Statistik Bulan Ini</h3>
-            <div class="monthly-stats-grid">
-                <div class="monthly-stat">
-                    <h4>Rp <?php echo number_format($monthly_stats['total_sales'], 0, ',', '.'); ?></h4>
-                    <p>Total Penjualan</p>
-                </div>
-                <div class="monthly-stat">
-                    <h4><?php echo $monthly_stats['total_transactions']; ?></h4>
-                    <p>Total Transaksi</p>
-                </div>
-                <div class="monthly-stat">
-                    <h4>Rp <?php echo number_format($monthly_stats['avg_transaction'], 0, ',', '.'); ?></h4>
-                    <p>Rata-rata Transaksi</p>
-                </div>
+        <div class="stats-grid">
+            <div class="stat-card primary">
+                <i class="fas fa-shopping-cart"></i>
+                <h3><?php echo $user_stats['total_transactions']; ?></h3>
+                <p>Total Transaksi</p>
+            </div>
+            <div class="stat-card success">
+                <i class="fas fa-calendar-check"></i>
+                <h3><?php echo $user_stats['this_month_transactions']; ?></h3>
+                <p>Transaksi Bulan Ini</p>
+            </div>
+            <div class="stat-card warning">
+                <i class="fas fa-coins"></i>
+                <h3>Rp <?php echo number_format($user_stats['total_spent'], 0, ',', '.'); ?></h3>
+                <p>Total Pengeluaran</p>
+            </div>
+            <div class="stat-card info">
+                <i class="fas fa-box"></i>
+                <h3><?php echo $total_products; ?></h3>
+                <p>Produk Tersedia</p>
             </div>
         </div>
 
         <div class="content-grid">
-            <div class="main-panel">
+            <div class="main-content">
                 <div class="section-title">
                     <i class="fas fa-history"></i>
                     Transaksi Terbaru
                 </div>
                 
-                <?php if(!empty($recent_transactions)): ?>
-                    <?php foreach($recent_transactions as $transaction): ?>
+                <?php if(!empty($user_transactions)): ?>
+                    <?php foreach($user_transactions as $transaction): ?>
                         <div class="transaction-item">
                             <div class="transaction-info">
                                 <h4><?php echo htmlspecialchars($transaction['transaction_code']); ?></h4>
@@ -455,7 +385,7 @@
                     <?php endforeach; ?>
                     
                     <div style="text-align: center; margin-top: 20px;">
-                        <a href="<?php echo base_url('admin/transactions'); ?>" class="btn btn-primary">
+                        <a href="<?php echo base_url('dashboard/my_transactions'); ?>" class="btn btn-primary">
                             <i class="fas fa-list"></i> Lihat Semua Transaksi
                         </a>
                     </div>
@@ -466,37 +396,37 @@
                 <?php endif; ?>
             </div>
 
-            <div class="sidebar-panel">
+            <div class="sidebar-content">
                 <div class="section-title">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Stok Rendah
+                    <i class="fas fa-star"></i>
+                    Produk Terbaru
                 </div>
                 
-                <?php if(!empty($low_stock_products)): ?>
-                    <?php foreach($low_stock_products as $product): ?>
-                        <div class="product-item">
-                            <div class="product-info">
+                <?php if(!empty($recent_products)): ?>
+                    <div class="product-grid">
+                        <?php foreach($recent_products as $product): ?>
+                            <div class="product-card">
                                 <h4><?php echo htmlspecialchars($product['name']); ?></h4>
                                 <p>Rp <?php echo number_format($product['price'], 0, ',', '.'); ?></p>
+                                <span class="badge <?php echo $product['stock'] <= 5 ? 'badge-danger' : 'badge-success'; ?>">
+                                    Stok: <?php echo $product['stock']; ?>
+                                </span>
                             </div>
-                            <span class="stock-badge stock-low">
-                                <?php echo $product['stock']; ?>
-                            </span>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
                     
                     <div style="text-align: center; margin-top: 20px;">
-                        <a href="<?php echo base_url('admin/products'); ?>" class="btn btn-success">
-                            <i class="fas fa-box"></i> Kelola Produk
+                        <a href="<?php echo base_url('dashboard/products'); ?>" class="btn btn-success">
+                            <i class="fas fa-eye"></i> Lihat Semua Produk
                         </a>
                     </div>
                 <?php else: ?>
                     <p style="text-align: center; color: #666;">
-                        <i class="fas fa-check-circle"></i> Semua stok aman.
+                        <i class="fas fa-info-circle"></i> Belum ada produk.
                     </p>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 </body>
-</html>
+</html> 

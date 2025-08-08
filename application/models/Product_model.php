@@ -127,4 +127,15 @@ class Product_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function get_recent_products($limit = 5) {
+        $this->db->select('products.*, categories.name as category_name');
+        $this->db->from('products');
+        $this->db->join('categories', 'categories.id = products.category_id', 'left');
+        $this->db->where('products.status', 'active');
+        $this->db->order_by('products.created_at', 'DESC');
+        $this->db->limit($limit);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

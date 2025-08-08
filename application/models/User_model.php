@@ -59,4 +59,8 @@ class User_model extends CI_Model {
         $this->db->where('id', $user_id);
         return $this->db->update('users', array('role' => $role));
     }
+
+    public function count_users() {
+        return $this->db->count_all('users');
+    }
 }

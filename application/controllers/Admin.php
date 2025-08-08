@@ -15,24 +15,14 @@ class Admin extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->library('session');
         $this->load->model('User_model');
         $this->load->model('Product_model');
         $this->load->model('Transaction_model');
-        $this->load->library('form_validation');
         $this->load->helper('security');
+        $this->load->helper('auth');
         
-        // Cek apakah user sudah login
-        if (!$this->session->userdata('logged_in')) {
-            redirect('login');
-        }
-        
-        // Cek apakah user adalah admin
-        $user_id = $this->session->userdata('user_id');
-        if (!$this->User_model->is_admin($user_id)) {
-            $this->session->set_flashdata('error', 'Akses ditolak! Hanya admin yang dapat mengakses halaman ini.');
-            redirect('dashboard');
-        }
+        // Cek apakah user sudah login dan adalah admin
+        require_admin();
     }
 
     public function index() {
@@ -42,6 +32,7 @@ class Admin extends CI_Controller {
         $data['total_products'] = $this->Product_model->count_active_products();
         $data['total_transactions'] = $this->Transaction_model->count_transactions();
         $data['today_transactions'] = $this->Transaction_model->count_transactions_by_date(date('Y-m-d'));
+        $data['total_users'] = $this->User_model->count_users();
         
         // Get today's sales summary
         $data['today_summary'] = $this->Transaction_model->get_daily_summary(date('Y-m-d'));
@@ -52,7 +43,81 @@ class Admin extends CI_Controller {
         // Get recent transactions
         $data['recent_transactions'] = $this->Transaction_model->get_all_transactions(5, 0);
         
+        // Get monthly statistics
+        $current_year = date('Y');
+        $current_month = date('m');
+        $data['monthly_stats'] = array(
+            'total_sales' => $this->Transaction_model->get_monthly_sales($current_year, $current_month),
+            'total_transactions' => $this->Transaction_model->count_transactions_by_month($current_year, $current_month),
+            'avg_transaction' => $this->Transaction_model->get_average_transaction_amount($current_year, $current_month)
+        );
+        
         $this->load->view('admin/dashboard_view', $data);
+    }
+
+    // ========== USER MANAGEMENT ==========
+    
+    public function users() {
+        $data['page_title'] = 'Manajemen User';
+        $data['users'] = $this->User_model->get_all_users();
+        
+        $this->load->view('admin/users_view', $data);
+    }
+
+    public function edit_user($id) {
+        $data['page_title'] = 'Edit User';
+        $data['user'] = $this->User_model->get_user_by_id($id);
+        
+        if (!$data['user']) {
+            show_404();
+        }
+        
+        if ($this->input->post()) {
+            $this->form_validation->set_rules('username', 'Username', 'required|max_length[50]');
+            $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+            $this->form_validation->set_rules('role', 'Role', 'required|in_list[user,admin]');
+            
+            if ($this->form_validation->run()) {
+                $update_data = array(
+                    'username' => $this->input->post('username', TRUE),
+                    'email' => $this->input->post('email', TRUE),
+                    'full_name' => $this->input->post('full_name', TRUE),
+                    'phone' => $this->input->post('phone', TRUE),
+                    'role' => $this->input->post('role', TRUE),
+                    'status' => $this->input->post('status', TRUE)
+                );
+                
+                if ($this->User_model->update_user($id, $update_data)) {
+                    $this->session->set_flashdata('success', 'User berhasil diupdate!');
+                    redirect('admin/users');
+                } else {
+                    $this->session->set_flashdata('error', 'Gagal mengupdate user!');
+                }
+            }
+        }
+        
+        $this->load->view('admin/edit_user_view', $data);
+    }
+
+    public function delete_user($id) {
+        // Prevent admin from deleting themselves
+        if ($id == $this->session->userdata('user_id')) {
+            $this->session->set_flashdata('error', 'Anda tidak dapat menghapus akun sendiri!');
+            redirect('admin/users');
+        }
+        
+        $user = $this->User_model->get_user_by_id($id);
+        if (!$user) {
+            show_404();
+        }
+        
+        if ($this->User_model->delete_user($id)) {
+            $this->session->set_flashdata('success', 'User berhasil dihapus!');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus user!');
+        }
+        
+        redirect('admin/users');
     }
 
     // ========== PRODUCTS MANAGEMENT ==========

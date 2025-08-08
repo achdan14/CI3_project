@@ -47,11 +47,17 @@ class Login extends CI_Controller {
                     'user_id' => $user['id'],
                     'username' => $user['username'],
                     'email' => $user['email'],
+                    'role' => $user['role'],
                     'logged_in' => TRUE
                 );
                 $this->session->set_userdata($session_data);
                 
-                redirect('dashboard');
+                // Redirect berdasarkan role
+                if ($user['role'] == 'admin') {
+                    redirect('admin');
+                } else {
+                    redirect('dashboard');
+                }
             } else {
                 // Login gagal
                 $this->session->set_flashdata('error', 'Username atau password salah!');

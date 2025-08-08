@@ -114,8 +114,8 @@
 
             <div class="nav-menu">
                 <a href="<?php echo base_url('dashboard/profile'); ?>" class="nav-btn">Profil Saya</a>
-                <a href="<?php echo base_url('dashboard/users'); ?>" class="nav-btn secondary">Daftar User</a>
-                <a href="<?php echo base_url('register'); ?>" class="nav-btn secondary">Tambah User</a>
+                <a href="<?php echo base_url('dashboard/edit_profile'); ?>" class="nav-btn secondary">Edit Profil</a>
+                <a href="<?php echo base_url('dashboard/change_password'); ?>" class="nav-btn secondary">Ganti Password</a>
             </div>
         </div>
     </div>

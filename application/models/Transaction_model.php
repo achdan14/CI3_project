@@ -162,20 +162,6 @@ class Transaction_model extends CI_Model {
         return $query->row_array();
     }
 
-    public function get_monthly_sales($year, $month) {
-        $this->db->select('
-            DATE(transaction_date) as date,
-            COUNT(*) as total_transactions,
-            SUM(CASE WHEN payment_status = "paid" THEN total_amount ELSE 0 END) as total_sales
-        ');
-        $this->db->where('YEAR(transaction_date)', $year);
-        $this->db->where('MONTH(transaction_date)', $month);
-        $this->db->group_by('DATE(transaction_date)');
-        $this->db->order_by('transaction_date', 'ASC');
-        $query = $this->db->get('transactions');
-        return $query->result_array();
-    }
-
     public function get_top_selling_products($start_date, $end_date, $limit = 10) {
         $this->db->select('
             transaction_items.product_name,
@@ -205,6 +191,76 @@ class Transaction_model extends CI_Model {
         $this->db->where('transaction_date <=', $end_date);
         $this->db->group_by('payment_method');
         $this->db->order_by('total_amount', 'DESC');
+        $query = $this->db->get('transactions');
+        return $query->result_array();
+    }
+
+    // User-specific transaction methods
+    public function get_transactions_by_user($user_id, $limit = null, $offset = null) {
+        $this->db->select('transactions.*, users.username as created_by_name');
+        $this->db->from('transactions');
+        $this->db->join('users', 'users.id = transactions.created_by', 'left');
+        $this->db->where('transactions.created_by', $user_id);
+        $this->db->order_by('transactions.created_at', 'DESC');
+        
+        if ($limit) {
+            $this->db->limit($limit, $offset);
+        }
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function count_transactions_by_user($user_id) {
+        $this->db->where('created_by', $user_id);
+        return $this->db->count_all_results('transactions');
+    }
+
+    public function count_transactions_by_user_date($user_id, $date) {
+        $this->db->where('created_by', $user_id);
+        $this->db->where('transaction_date', $date);
+        return $this->db->count_all_results('transactions');
+    }
+
+    public function get_total_spent_by_user($user_id) {
+        $this->db->select('SUM(total_amount) as total_spent');
+        $this->db->where('created_by', $user_id);
+        $this->db->where('payment_status', 'paid');
+        $query = $this->db->get('transactions');
+        $result = $query->row_array();
+        return $result ? $result['total_spent'] : 0;
+    }
+
+    public function count_transactions_by_month($year, $month) {
+        $this->db->where('YEAR(transaction_date)', $year);
+        $this->db->where('MONTH(transaction_date)', $month);
+        return $this->db->count_all_results('transactions');
+    }
+
+    public function get_average_transaction_amount($year = null, $month = null) {
+        $this->db->select('AVG(total_amount) as average_amount');
+        
+        if ($year && $month) {
+            $this->db->where('YEAR(transaction_date)', $year);
+            $this->db->where('MONTH(transaction_date)', $month);
+        }
+        
+        $query = $this->db->get('transactions');
+        $result = $query->row_array();
+        return $result ? $result['average_amount'] : 0;
+    }
+
+    // Updated get_monthly_sales method to accept year and month parameters
+    public function get_monthly_sales($year, $month) {
+        $this->db->select('
+            DATE(transaction_date) as date,
+            COUNT(*) as total_transactions,
+            SUM(CASE WHEN payment_status = "paid" THEN total_amount ELSE 0 END) as total_sales
+        ');
+        $this->db->where('YEAR(transaction_date)', $year);
+        $this->db->where('MONTH(transaction_date)', $month);
+        $this->db->group_by('DATE(transaction_date)');
+        $this->db->order_by('DATE(transaction_date)', 'ASC');
         $query = $this->db->get('transactions');
         return $query->result_array();
     }
